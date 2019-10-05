@@ -6,7 +6,7 @@ __date__ = '20190927'
 """
 import sys
 sys.path.append('../utils/')
-from data_utils import MakeTargetLLDDataset
+from data_utils import MakeTargetLLDataset
 sys.path.append('../model/')
 from cnn_model import *
 import pandas as pd
@@ -46,7 +46,6 @@ def train(net, dataloaders_dict, criterion, optimizer, num_epochs):
                 inputs4 = inputs4.to(device)
                 if labels.data.numpy()[0] == -1:
                     h, c = net.reset_state(1)
-                    print('reset state! conversation changed!')
                     continue
                 labels = labels.to(device)
                 if cnt == 0 :
@@ -100,15 +99,15 @@ def train(net, dataloaders_dict, criterion, optimizer, num_epochs):
     from sklearn.metrics import accuracy_score, confusion_matrix
     print(accuracy_score(y_true, y_pred))
     print(confusion_matrix(y_true, y_pred))
-    torch.save(net.state_dict(), './target_model.pth')
+    torch.save(net.state_dict(), './target_lld_model.pth')
 
 def main():
 
     sp_files = sorted(glob.glob('/mnt/aoni02/katayama/dataset/DATA2019/LLD/*csv'))
     feature_files = sorted(glob.glob('/mnt/aoni02/katayama/dataset/DATA2019/feature/*csv'))
 
-    datamaker = MakeTargetLLDDataset(sp_files, feature_files)
-    x_spA, x_spB, x_img, x_t, y = datamaker(start=13,end=43,reset_flag=True)
+    datamaker = MakeTargetLLDataset(sp_files, feature_files)
+    x_spA, x_spB, x_img, x_t, y = datamaker(start=13,end=14,reset_flag=True)
     x_spA_val, x_spB_val, x_img_val, x_t_val, y_val = datamaker(start=43, end=48,reset_flag=True)
     x_spA_test, x_spB_test, x_img_test, x_t_test, y_test = datamaker(start=48, end=53,reset_flag=True)
 

@@ -56,7 +56,7 @@ class MakeTargetDataset(object):
                torch.tensor(x_img, dtype=torch.float32), torch.tensor(x_t, dtype=torch.float32), \
                torch.tensor(y, dtype=torch.long)
 
-class MakeTargetLLDDataset(object):
+class MakeTargetLLDataset(object):
 
     def __init__(self, sp_path_list, label_path_list):
 
@@ -72,10 +72,10 @@ class MakeTargetLLDDataset(object):
 
             df = pd.read_csv(sp_f)
             df = df[:len(df) // sp_step * sp_step]
-            x_spA = np.append(x_spA, df.iloc[:-1,:114].values, axis=0) \
-                        if len(x_spA) != 0 else df.iloc[:, :114].values[:-1]
-            x_spB = np.append(x_spB, df.iloc[:-1, 114:].values, axis=0) \
-                if len(x_spB) != 0 else df.iloc[:, 114:].values[:-1]
+            x_spA = np.append(x_spA, df.iloc[:,:114].values, axis=0) \
+                        if len(x_spA) != 0 else df.iloc[:, :114].values
+            x_spB = np.append(x_spB, df.iloc[:, 114:].values, axis=0) \
+                if len(x_spB) != 0 else df.iloc[:, 114:].values
             length = len(df) // sp_step
 
             df = pd.read_csv(f)[:length]
@@ -93,12 +93,14 @@ class MakeTargetLLDDataset(object):
                 会話データ間にreset flagを埋め込むか
                 LSTMを用いた stateful model を実装するなら必要
                 """
-                x_spA = np.append(x_spA, np.zeros((1,256)), axis=0)
-                x_spB = np.append(x_spB, np.zeros((1,256)), axis=0)
+                x_spA = np.append(x_spA, np.zeros((sp_step,114)), axis=0)
+                x_spB = np.append(x_spB, np.zeros((sp_step,114)), axis=0)
                 x_img = np.append(x_img, np.zeros((1,1,32,96)), axis=0)
                 x_t = np.append(x_t, 0)
                 y = np.append(y,-1)
 
+        x_spA = x_spA.reshape(-1, sp_step, 114)
+        x_spB = x_spB.reshape(-1, sp_step, 114)
         print(x_spA.shape, x_img.shape, y.shape, x_t.shape)
 
         return torch.tensor(x_spA, dtype=torch.float32), torch.tensor(x_spB, dtype=torch.float32), \

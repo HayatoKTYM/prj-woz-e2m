@@ -443,6 +443,6 @@ class VADPredictLLD(nn.Module):
         x = F.dropout(F.relu(self.fc1(x.view(-1, 114))), p=0.5)
         h, c = self.reset_state(batch_size)
 
-        h, _, _ = self.lstm(x.view(batch_size, frames, self.hidden_size), (h, c))
+        h, _ = self.lstm(x.view(batch_size, frames, self.hidden_size), (h, c))
 
         return h[:,-1,:]

@@ -46,7 +46,6 @@ def train(net, dataloaders_dict, criterion, optimizer, num_epochs):
                 inputs4 = inputs4.to(device)
                 if labels.data.numpy()[0] == -1:
                     h, c = net.reset_state(1)
-                    print('reset state! conversation changed!')
                     continue
                 labels = labels.to(device)
                 if cnt == 0 :
