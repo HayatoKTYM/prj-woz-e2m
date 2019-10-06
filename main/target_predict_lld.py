@@ -99,7 +99,7 @@ def train(net, dataloaders_dict, criterion, optimizer, num_epochs):
     from sklearn.metrics import accuracy_score, confusion_matrix
     print(accuracy_score(y_true, y_pred))
     print(confusion_matrix(y_true, y_pred))
-    torch.save(net.state_dict(), './target_lld_model.pth')
+    torch.save(net.state_dict(), '../result/target_lld_model.pth')
 
 def main():
 
@@ -107,7 +107,7 @@ def main():
     feature_files = sorted(glob.glob('/mnt/aoni02/katayama/dataset/DATA2019/feature/*csv'))
 
     datamaker = MakeTargetLLDataset(sp_files, feature_files)
-    x_spA, x_spB, x_img, x_t, y = datamaker(start=13,end=14,reset_flag=True)
+    x_spA, x_spB, x_img, x_t, y = datamaker(start=13,end=43,reset_flag=True)
     x_spA_val, x_spB_val, x_img_val, x_t_val, y_val = datamaker(start=43, end=48,reset_flag=True)
     x_spA_test, x_spB_test, x_img_test, x_t_test, y_test = datamaker(start=48, end=53,reset_flag=True)
 
@@ -128,7 +128,7 @@ def main():
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(net.parameters(), lr=1e-03)
 
-    train(net=net, dataloaders_dict=dataloaders_dict, criterion=criterion, optimizer=optimizer, num_epochs=50)
+    train(net=net, dataloaders_dict=dataloaders_dict, criterion=criterion, optimizer=optimizer, num_epochs=20)
 
 
 if __name__ == '__main__':
