@@ -4,7 +4,7 @@ __date__ = '20190927'
 """
 視線推定を行うプログラム
 """
-
+import sys
 sys.path.append('../model/')
 from cnn_model import GazeTrain
 
@@ -100,7 +100,7 @@ def train(net, dataloaders_dict, criterion, optimizer, num_epochs):
     from sklearn.metrics import accuracy_score, confusion_matrix
     print(accuracy_score(y_true, y_pred))
     print(confusion_matrix(y_true, y_pred))
-    torch.save(net.state_dict(), './gaze_model.pth')
+    #torch.save(net.state_dict(), './gaze_model.pth')
 
 def main():
     # 画像pathの読み込み
